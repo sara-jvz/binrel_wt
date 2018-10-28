@@ -7,6 +7,8 @@
 #include <limits>           // numeric_limits
 #include <stdexcept>        // domain_error
 
+#include "brwt/serialization.hpp" // serialize, load
+
 namespace brwt {
 
 template <typename InputIt>
@@ -80,6 +82,26 @@ auto int_vector::erase(const_iterator first, const_iterator last) noexcept
   num_elems = index_of(new_end);
 
   return non_const(first);
+}
+
+bool int_vector::load(std::istream &in) noexcept {
+  if (!in.good())
+    return false;
+  try {
+    num_elems = static_cast<size_type>(load_number(in));
+    bits_per_element = static_cast<size_type>(load_number(in));
+    return bit_seq.load(in);
+  } catch (...) {
+    return false;
+  }
+}
+
+void int_vector::serialize(std::ostream &out) const {
+  if (!out.good())
+    throw std::ofstream::failure("Bad stream");
+  serialize_number(out, static_cast<unsigned>(num_elems));
+  serialize_number(out, static_cast<unsigned>(bits_per_element));
+  bit_seq.serialize(out);
 }
 
 } // end namespace brwt

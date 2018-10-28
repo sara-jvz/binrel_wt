@@ -8,6 +8,8 @@
 #include <utility>           // move, exchange
 #include <vector>            // vector
 
+#include "brwt/serialization.hpp" // serialize, load
+
 using brwt::wavelet_tree;
 using node_proxy = wavelet_tree::node_proxy;
 
@@ -101,13 +103,13 @@ auto wavelet_tree::access(index_type pos) const noexcept -> symbol_id {
       pos = node.rank_0(pos) - 1; // 1 rank
       node = node.make_lhs();     // 2 ranks
     } else {
-      res |= 1u;
+      res |= static_cast<symbol_id>(1u);
       pos = node.rank_1(pos) - 1; // 1 rank
       node = node.make_rhs();     // 2 ranks
     }
-    res <<= 1;
+    res <<= static_cast<symbol_id>(1);
   }
-  res |= (node.access(pos)) ? 1u : 0u;
+  res |= (node.access(pos)) ? static_cast<symbol_id>(1u) : static_cast<symbol_id>(0u);
   return res;
 }
 
@@ -189,6 +191,26 @@ auto wavelet_tree::max_symbol_id() const noexcept -> symbol_id {
                        ? limits::max()
                        : (symbol_id(1) << bits_per_symbol) - 1;
   return static_cast<symbol_id>(res);
+}
+
+bool wavelet_tree::load(std::istream &in) noexcept {
+  if (!in.good())
+    return false;
+  try {
+    seq_len = static_cast<size_type>(load_number(in));
+    bits_per_symbol = static_cast<size_type>(load_number(in));
+    return table.load(in);
+  } catch (...) {
+    return false;
+  }
+}
+
+void wavelet_tree::serialize(std::ostream &out) const {
+  if (!out.good())
+    throw std::ofstream::failure("Bad stream");
+  serialize_number(out, static_cast<uint32_t>(seq_len));
+  serialize_number(out, static_cast<uint32_t>(bits_per_symbol));
+  table.serialize(out);
 }
 
 // ==========================================

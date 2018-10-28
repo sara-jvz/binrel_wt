@@ -45,6 +45,9 @@ public:
   ///
   const block_type* data() const noexcept;
 
+  bool load(std::istream &in) noexcept;
+  void serialize(std::ostream &out) const;
+
 private:
   size_type m_len{};
   std::vector<block_type> blocks;

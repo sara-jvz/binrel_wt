@@ -260,6 +260,14 @@ public:
     swap(bits_per_element, other.bits_per_element);
   }
 
+  /// \brief Loads from input stream.
+  ///
+  bool load(std::istream &in) noexcept;
+
+  /// \brief Serializes into output stream.
+  ///
+  void serialize(std::ostream &out) const;
+
   /// @}
 private:
   value_type get_value(const size_type pos) const noexcept {

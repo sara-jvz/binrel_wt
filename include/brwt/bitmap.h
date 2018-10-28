@@ -31,6 +31,9 @@ public:
   size_type num_ones() const noexcept;
   size_type num_zeros() const noexcept;
 
+  bool load(std::istream &in) noexcept;
+  void serialize(std::ostream &out) const;
+
 private:
   auto blocks_of_super_block(index_type sb_idx) const noexcept;
   size_type num_super_blocks() const noexcept;

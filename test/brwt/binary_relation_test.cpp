@@ -1151,4 +1151,18 @@ TEST_CASE("count_distinct_labels, complex") {
   CHECK(count_labels(4_lab, 8_lab) == 4);
 }
 
+TEST_CASE("serialize_and_load, basic") {
+  const auto br = make_test_binary_relation();
+  const std::string test_dump_basename = "../test/test_dump";
+  std::ofstream outstream(test_dump_basename);
+  br.serialize();
+  outstream.close();
+
+  binary_relation br_loaded();
+  std::ifstream instream(test_dump_basename);
+  br_loaded.load();
+  instream.close();
+  CHECK(br == br_loaded);
+}
+
 TEST_SUITE_END();

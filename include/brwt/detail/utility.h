@@ -11,7 +11,7 @@ namespace brwt::detail {
 ///
 template <typename SmartRef>
 class pointed_reference {
-  static_assert(!std::is_reference_v<SmartRef>,
+  static_assert(!std::is_reference<SmartRef>::value,
                 "This class is intended for smart references only");
 
 public:

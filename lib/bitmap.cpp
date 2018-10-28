@@ -10,6 +10,8 @@
 #include <type_traits>        // enable_if_t
 #include <utility>            // move
 
+#include "brwt/serialization.hpp" // serialize, load
+
 namespace brwt {
 
 using block_t = bit_vector::block_type;
@@ -241,6 +243,26 @@ auto bitmap::select_1(size_type nth) const noexcept -> index_type {
 auto bitmap::select_0(size_type nth) const noexcept -> index_type {
   assert(nth > 0);
   return select<0>(nth);
+}
+
+bool bitmap::load(std::istream &in) noexcept {
+  if (!in.good())
+    return false;
+  try {
+    if (!bit_seq.load(in)) {
+      return false;
+    }
+    return sb_rank_1.load(in);
+  } catch (...) {
+    return false;
+  }
+}
+
+void bitmap::serialize(std::ostream &out) const {
+  if (!out.good())
+    throw std::ofstream::failure("Bad stream");
+  bit_seq.serialize(out);
+  sb_rank_1.serialize(out);
 }
 
 } // end namespace brwt

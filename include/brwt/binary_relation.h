@@ -198,6 +198,14 @@ public:
   ///
   size_type label_alphabet_size() const noexcept;
 
+  /// \brief Loads binary_relation from input stream.
+  ///
+  bool load(std::istream &in) noexcept;
+
+  /// \brief Serializes binary_relation into output stream.
+  ///
+  void serialize(std::ostream &out) const;
+
   /// @}
 
 private:

@@ -88,6 +88,14 @@ public:
   ///
   node_proxy make_root() const noexcept;
 
+  /// \brief Loads wavelet_tree from input stream.
+  ///
+  bool load(std::istream &in) noexcept;
+
+  /// \brief Serializes wavelet_tree into output stream.
+  ///
+  void serialize(std::ostream &out) const;
+
 private:
   /// Representation of the wavelet tree without pointers.
   bitmap table{};

@@ -401,15 +401,15 @@ nth_element(const wavelet_tree& wt, index_range range, size_type nth) noexcept {
       range = rhs_range;
       node = node.make_rhs();
       nth -= size(lhs_range);
-      symbol |= 1u;
+      symbol |= static_cast<symbol_id>(1u);
     }
-    symbol <<= 1;
+    symbol <<= static_cast<symbol_id>(1);
   }
   {
     const auto lhs_range = make_lhs_range(range, node);
     if (nth > size(lhs_range)) {
       nth -= size(lhs_range);
-      symbol |= 1u;
+      symbol |= static_cast<symbol_id>(1u);
     }
   }
   assert(nth > 0);

@@ -11,6 +11,8 @@
 #include <utility>            // pair, make_pair, move
 #include <vector>             // vector
 
+#include "brwt/serialization.hpp" // serialize, load
+
 namespace brwt {
 
 using std::size_t;
@@ -427,6 +429,26 @@ auto binary_relation::count_distinct_labels(const object_id x,
   const auto range = make_mapped_range(x, y);
   const auto cond = between<symbol_id>{as_symbol(alpha), as_symbol(beta)};
   return count_distinct_symbols(m_wtree, range, cond);
+}
+
+bool binary_relation::load(std::istream &in) noexcept {
+  if (!in.good())
+    return false;
+  try {
+    if (!m_wtree.load(in)) {
+      return false;
+    }
+    return m_bitmap.load(in);
+  } catch (...) {
+    return false;
+  }
+}
+
+void binary_relation::serialize(std::ostream &out) const {
+  if (!out.good())
+    throw std::ofstream::failure("Bad stream");
+  m_wtree.serialize(out);
+  m_bitmap.serialize(out);
 }
 
 } // end namespace brwt

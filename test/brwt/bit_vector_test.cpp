@@ -232,4 +232,25 @@ TEST_CASE("bit_vector::set_block") {
   static_assert(noexcept(bit_vector().set_block(0, 0xFFFF)), "");
 }
 
+TEST_CASE("bit_vector::serialize_and_load") {
+  constexpr auto bpb = bit_vector::bits_per_block;
+  bit_vector v(4 * bpb);
+  v.set_block(0, 0xFF19'1984);
+  v.set_block(2, 0x3492'4238);
+  v.set_block(3, 0x4750'1434);
+  const std::string file_name = "../test/vector_dump_test";
+  std::ofstream outstream(file_name);
+  v.serialize(outstream);
+  outstream.close();
+
+  std::ifstream instream(file_name);
+  CHECK(v_loaded.load(instream) == true);
+  instream.close();
+
+  CHECK(v_loaded.get_block(0) == 0xFF19'1984);
+  CHECK(v_loaded.get_block(1) == 0);
+  CHECK(v_loaded.get_block(2) == 0x3492'4238);
+  CHECK(v_loaded.get_block(3) == 0x4750'1434);
+}
+
 TEST_SUITE_END();

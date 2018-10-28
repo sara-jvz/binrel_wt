@@ -1,9 +1,11 @@
 #include <brwt/bit_vector.h>
 
-#include <brwt/bit_hacks.h> // lsb_mask
-#include <brwt/utility.h>   // ceil_div
-#include <algorithm>        // min
-#include <cassert>          // assert
+#include <brwt/bit_hacks.h>       // lsb_mask
+#include <brwt/utility.h>         // ceil_div
+#include <algorithm>              // min
+#include <cassert>                // assert
+
+#include "brwt/serialization.hpp"
 
 using brwt::bit_vector;
 using size_type = bit_vector::size_type;
@@ -129,4 +131,23 @@ void bit_vector::set_chunk(const size_type pos, const size_type count,
 
   at(blocks, lblock + 1) &= ~rmask;
   at(blocks, lblock + 1) |= (value >> lcount) & rmask;
+}
+
+bool bit_vector::load(std::istream &in) noexcept {
+  if (!in.good())
+    return false;
+  try {
+    m_len = static_cast<size_type>(load_number(in));
+    blocks = load_number_vector<block_type>(in);
+    return true;
+  } catch (...) {
+    return false;
+  }
+}
+
+void bit_vector::serialize(std::ostream &out) const {
+  if (!out.good())
+    throw std::ofstream::failure("Bad stream");
+  serialize_number(out, static_cast<size_type>(m_len));
+  serialize_number_vector(out, blocks);
 }
