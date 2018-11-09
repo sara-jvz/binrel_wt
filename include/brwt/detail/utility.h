@@ -5,7 +5,8 @@
 #include <type_traits> // is_reference
 #include <utility>     // move
 
-namespace brwt::detail {
+namespace brwt {
+namespace detail {
 
 /// \brief Class used to treat a smart reference (or proxy) as a pointer.
 ///
@@ -52,6 +53,7 @@ struct reference_traits<T&> {
   }
 };
 
-} // namespace brwt::detail
+} // namespace detail
+} // namespace brwt
 
 #endif // BRWT_DETAIL_UTILITY_H
