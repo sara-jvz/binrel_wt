@@ -1,4 +1,5 @@
 #include <brwt/wavelet_tree.h>
+#include <brwt/serialization.h> // serialize, load
 
 #include "bitmask_support.h" // symbol_id-stuff
 #include "static_vector.h"   // static_vector
@@ -7,8 +8,6 @@
 #include <limits>            // numeric_limits
 #include <utility>           // move, exchange
 #include <vector>            // vector
-
-#include "brwt/serialization.hpp" // serialize, load
 
 using brwt::wavelet_tree;
 using node_proxy = wavelet_tree::node_proxy;
@@ -207,9 +206,9 @@ bool wavelet_tree::load(std::istream &in) noexcept {
 
 void wavelet_tree::serialize(std::ostream &out) const {
   if (!out.good())
-    throw std::ofstream::failure("Bad stream");
-  serialize_number(out, static_cast<uint32_t>(seq_len));
-  serialize_number(out, static_cast<uint32_t>(bits_per_symbol));
+    throw std::ostream::failure("Bad stream");
+  serialize_number(out, static_cast<uint64_t>(seq_len));
+  serialize_number(out, static_cast<uint64_t>(bits_per_symbol));
   table.serialize(out);
 }
 

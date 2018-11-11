@@ -10,8 +10,6 @@
 #include <type_traits>        // enable_if_t
 #include <utility>            // move
 
-#include "brwt/serialization.hpp" // serialize, load
-
 namespace brwt {
 
 using block_t = bit_vector::block_type;
@@ -260,7 +258,7 @@ bool bitmap::load(std::istream &in) noexcept {
 
 void bitmap::serialize(std::ostream &out) const {
   if (!out.good())
-    throw std::ofstream::failure("Bad stream");
+    throw std::ostream::failure("Bad stream");
   bit_seq.serialize(out);
   sb_rank_1.serialize(out);
 }

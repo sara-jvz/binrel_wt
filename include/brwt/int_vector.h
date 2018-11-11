@@ -7,6 +7,7 @@
 #include <cassert>                // assert
 #include <cstddef>                // ptrdiff_t
 #include <initializer_list>       // initializer_list
+#include <iostream>               // iostream
 
 namespace brwt {
 

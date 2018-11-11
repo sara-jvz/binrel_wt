@@ -1,7 +1,7 @@
 #ifndef BRWT_COMMON_TYPES_H
 #define BRWT_COMMON_TYPES_H
 
-#include <experimental/optional> // optional
+#include <optional>              // optional
 #include <cstddef>               // ptrdiff_t
 #include <cstdint>               // uint_fast64_t
 
@@ -28,8 +28,8 @@ using types::word_type;
 
 constexpr index_type index_npos = -1;
 
-using std::experimental::nullopt;
-using std::experimental::optional;
+using std::nullopt;
+using std::optional;
 
 // wavelet tree types
 

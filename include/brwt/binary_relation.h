@@ -5,6 +5,7 @@
 #include <brwt/common_types.h> // size_type, word_type, optional
 #include <brwt/wavelet_tree.h> // wavelet_tree
 #include <vector>              // vector
+#include <iostream>            // iostream
 
 namespace brwt {
 
@@ -241,7 +242,7 @@ inline auto binary_relation::object_alphabet_size() const noexcept
 }
 
 inline auto binary_relation::label_alphabet_size() const noexcept -> size_type {
-  return m_wtree.max_symbol_id() + 1;
+  return static_cast<size_type>(m_wtree.max_symbol_id()) + 1;
 }
 
 // ==========================================

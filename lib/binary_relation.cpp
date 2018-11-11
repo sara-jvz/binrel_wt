@@ -11,8 +11,6 @@
 #include <utility>            // pair, make_pair, move
 #include <vector>             // vector
 
-#include "brwt/serialization.hpp" // serialize, load
-
 namespace brwt {
 
 using std::size_t;
@@ -161,7 +159,7 @@ static auto count_objects_frequency(const vector<pair_type>& pairs,
   // TODO(Diego): Consider to replace the histogram with a compressed vector.
   const auto num_objects = static_cast<size_t>(max_object) + 1;
   std::vector<size_type> frequency(num_objects);
-  for_each(pairs, [&](const pair_type& p) { ++frequency[p.object]; });
+  for_each(pairs, [&](const pair_type& p) { ++frequency[static_cast<size_t>(p.object)]; });
   return frequency;
 }
 
@@ -181,8 +179,8 @@ static wavelet_tree make_wavelet_tree(const vector<pair_type>& pairs,
   // inline counting sort to do this.
   inplace_exclusive_scan(objects_frequency, size_type{0});
   for_each(pairs, [&](const pair_type& p) {
-    const auto next_pos = objects_frequency[p.object]++;
-    seq[next_pos] = p.label;
+    const auto next_pos = objects_frequency[static_cast<size_t>(p.object)]++;
+    seq[next_pos] = static_cast<uint64_t>(p.label);
   });
 
   assert(objects_frequency.back() == seq.size());
@@ -446,7 +444,7 @@ bool binary_relation::load(std::istream &in) noexcept {
 
 void binary_relation::serialize(std::ostream &out) const {
   if (!out.good())
-    throw std::ofstream::failure("Bad stream");
+    throw std::ostream::failure("Bad stream");
   m_wtree.serialize(out);
   m_bitmap.serialize(out);
 }

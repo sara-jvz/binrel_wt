@@ -1,11 +1,10 @@
 #include <brwt/bit_vector.h>
 
+#include <brwt/serialization.h>
 #include <brwt/bit_hacks.h>       // lsb_mask
 #include <brwt/utility.h>         // ceil_div
 #include <algorithm>              // min
 #include <cassert>                // assert
-
-#include "brwt/serialization.hpp"
 
 using brwt::bit_vector;
 using size_type = bit_vector::size_type;
@@ -138,7 +137,7 @@ bool bit_vector::load(std::istream &in) noexcept {
     return false;
   try {
     m_len = static_cast<size_type>(load_number(in));
-    blocks = load_number_vector<block_type>(in);
+    blocks = load_number_vector(in);
     return true;
   } catch (...) {
     return false;
@@ -147,7 +146,7 @@ bool bit_vector::load(std::istream &in) noexcept {
 
 void bit_vector::serialize(std::ostream &out) const {
   if (!out.good())
-    throw std::ofstream::failure("Bad stream");
-  serialize_number(out, static_cast<size_type>(m_len));
+    throw std::ostream::failure("Bad stream");
+  serialize_number(out, static_cast<uint64_t>(m_len));
   serialize_number_vector(out, blocks);
 }

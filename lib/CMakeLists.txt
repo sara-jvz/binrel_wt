@@ -3,6 +3,7 @@ add_brwt_library(brwt
   "bit_vector.cpp"
   "bitmap.cpp"
   "int_vector.cpp"
+  "serialization.cpp"
   "wavelet_tree/algorithms.cpp"
   "wavelet_tree/wavelet_tree.cpp"
 )

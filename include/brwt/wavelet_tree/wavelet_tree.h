@@ -6,6 +6,7 @@
 #include <brwt/int_vector.h>   // int_vector
 #include <cstddef>             // ptrdiff_t
 #include <utility>             // pair
+#include <iostream>            // iostream
 
 namespace brwt {
 

@@ -1,13 +1,12 @@
 #include <brwt/int_vector.h> // int_vector
 
+#include <brwt/serialization.h> // serialize, load
 #include <brwt/bit_hacks.h> // lsb_mask, used_bits
 #include <algorithm>        // for_each, max_element, copy
 #include <cassert>          // assert
 #include <iterator>         // begin, end
 #include <limits>           // numeric_limits
 #include <stdexcept>        // domain_error
-
-#include "brwt/serialization.hpp" // serialize, load
 
 namespace brwt {
 
@@ -98,9 +97,9 @@ bool int_vector::load(std::istream &in) noexcept {
 
 void int_vector::serialize(std::ostream &out) const {
   if (!out.good())
-    throw std::ofstream::failure("Bad stream");
-  serialize_number(out, static_cast<unsigned>(num_elems));
-  serialize_number(out, static_cast<unsigned>(bits_per_element));
+    throw std::ostream::failure("Bad stream");
+  serialize_number(out, static_cast<uint64_t>(num_elems));
+  serialize_number(out, static_cast<uint64_t>(bits_per_element));
   bit_seq.serialize(out);
 }
 

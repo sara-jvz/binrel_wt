@@ -5,6 +5,7 @@
 #include <brwt/common_types.h> // index_type, size_type
 #include <brwt/int_vector.h>   // int_vector
 #include <cassert>             // assert
+#include <iostream>            // iostream
 
 namespace brwt {
 
