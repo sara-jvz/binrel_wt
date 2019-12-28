@@ -1,5 +1,7 @@
 cmake_minimum_required(VERSION 3.9.3)
-cmake_policy(SET CMP0077 NEW)
+if(POLICY CMP0077)
+  cmake_policy(SET CMP0077 NEW)
+endif()
 project("binrel_wt" CXX)
 
 # ---------------------------------------
